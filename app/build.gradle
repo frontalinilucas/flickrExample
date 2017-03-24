@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "FLICKR_API_URL", "\"https://api.flickr.com/\""
     }
     buildTypes {
         release {
@@ -27,4 +28,15 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     testCompile 'junit:junit:4.12'
+
+    /**
+     * JSON serializer / deserializer
+     */
+    compile 'com.google.code.gson:gson:2.7'
+
+    /**
+     * Retrofit
+     */
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FlickrExample</string>
+
+    <string name="flickrApiKey" translatable="false">e8cd99e5a4e00b32244e0512157b18e3</string>
 </resources>
