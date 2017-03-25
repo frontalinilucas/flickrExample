@@ -13,6 +13,8 @@ import retrofit2.http.Query;
 public interface IApiFlickrInterfaceService {
 
     @POST("/services/rest?method=flickr.photos.getRecent&format=json&nojsoncallback=1")
-    Call<RecentPublicPhotos> getPublicPhotos(@Query("api_key") String api_key);
+    Call<RecentPublicPhotos> getPublicPhotos(
+            @Query("api_key") String api_key,
+            @Query("per_page") int per_page);
 
 }

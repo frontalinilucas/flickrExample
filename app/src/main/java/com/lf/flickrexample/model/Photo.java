@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Photo {
 
-    private static final String BASE_URL_IMAGE = "https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg";
+    private static final String BASE_URL_IMAGE = "https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_n.jpg";
 
     @SerializedName("id")
     private String mId;
