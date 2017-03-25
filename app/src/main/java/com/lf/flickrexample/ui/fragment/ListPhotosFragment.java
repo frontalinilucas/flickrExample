@@ -1,9 +1,13 @@
-package com.lf.flickrexample.ui;
+package com.lf.flickrexample.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.lf.flickrexample.R;
 import com.lf.flickrexample.SingletonRetrofit;
@@ -21,26 +25,36 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by Lucas on 25/3/17.
+ */
+
+public class ListPhotosFragment extends Fragment {
 
     private IApiFlickrInterfaceService mApiService;
-    private List<Photo> mListPhotos;
     private GridAdapter mGridAdapter;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        setHasOptionsMenu(true);
+    }
 
-        mGridAdapter = new GridAdapter(this, mListPhotos);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
+        View view = inflater.inflate(R.layout.fragment_listphotos, container, false);
+        ButterKnife.bind(this, view);
+
+        mGridAdapter = new GridAdapter(getActivity(), null);
         mRecyclerview.setAdapter(mGridAdapter);
-        mRecyclerview.setLayoutManager(new GridLayoutManager(this, Constants.GRID_COLUMNS));
+        mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), Constants.GRID_COLUMNS));
 
         getRecentPhotos();
+
+        return view;
     }
 
     private void getRecentPhotos() {
@@ -69,4 +83,5 @@ public class MainActivity extends AppCompatActivity {
         mGridAdapter.setListPhotos(listPhotos);
         mGridAdapter.notifyDataSetChanged();
     }
+
 }
