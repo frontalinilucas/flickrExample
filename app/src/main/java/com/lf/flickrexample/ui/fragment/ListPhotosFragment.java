@@ -1,6 +1,7 @@
 package com.lf.flickrexample.ui.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -41,6 +42,8 @@ import retrofit2.Response;
 
 public class ListPhotosFragment extends Fragment {
 
+    private static final String KEY_PAGE_VIEW = "KEY_PAGE_VIEW";
+
     private IApiFlickrInterfaceService mApiService;
     private CustomAdapter mAdapter;
     private SearchView mSearchView;
@@ -75,7 +78,11 @@ public class ListPhotosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment_listphotos, container, false);
         ButterKnife.bind(this, view);
-        setPageView(1);
+
+        if(saveInstanceState == null)
+            setPageView(1);
+        else
+            setPageView(saveInstanceState.getInt(KEY_PAGE_VIEW));
 
         //TODO: Agregar placeholder si no hay imagenes
         mAdapter = new CustomAdapter(getActivity(), null);
@@ -150,6 +157,11 @@ public class ListPhotosFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_PAGE_VIEW, mPageView);
+    }
+
     private void setupSearchView() {
         mSearchView.setIconified(false);
         try{
@@ -199,8 +211,8 @@ public class ListPhotosFragment extends Fragment {
 
             @Override
             public void onFailure(Call<RecentPublicPhotos> call, Throwable t) {
-                //TODO. Mostrar error
                 mSwipeRefreshLayout.setRefreshing(false);
+                Snackbar.make(mRecyclerview, getString(R.string.error), Snackbar.LENGTH_LONG).show();
             }
         });
         updatePagerTitle();
@@ -221,7 +233,6 @@ public class ListPhotosFragment extends Fragment {
     }
 
     private void setPageView(int pageView) {
-        //mImgPagerBack.setEnabled(false);
         mImgPagerBack.setVisibility(View.VISIBLE);
         mImgPagerProceed.setVisibility(View.VISIBLE);
         if(pageView <= 1) {

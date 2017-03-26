@@ -5,4 +5,5 @@
     <string name="search">Buscar</string>
     <string name="changeLayoutManager">Cambiar vista</string>
     <string name="numberPage">Página %1$d</string>
+    <string name="error">Hubo un error. Intente de nuevo más tarde.</string>
 </resources>

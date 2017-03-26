@@ -2,12 +2,14 @@ package com.lf.flickrexample.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,6 +40,9 @@ public class PhotoDetailsFragment extends Fragment {
     private IApiFlickrInterfaceService mApiService;
     private Photo mPhoto;
     private Call<PhotoInfo> mPhotoInfo;
+
+    @BindView(R.id.scrollview)
+    ScrollView mScrollview;
 
     @BindView(R.id.imgDetail)
     AppCompatImageView mImgDetail;
@@ -109,7 +114,7 @@ public class PhotoDetailsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<PhotoInfo> call, Throwable t) {
-                //TODO. Error
+                Snackbar.make(mScrollview, getString(R.string.error), Snackbar.LENGTH_LONG).show();
             }
         });
     }

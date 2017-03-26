@@ -2,13 +2,14 @@ package com.lf.flickrexample.model.recentPhotos;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Lucas on 24/3/17.
  */
 
-public class Photos {
+public class Photos implements Serializable{
 
     @SerializedName("photo")
     private List<Photo> mPhotos;
