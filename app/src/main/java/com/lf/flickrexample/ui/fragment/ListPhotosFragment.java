@@ -3,13 +3,12 @@ package com.lf.flickrexample.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +18,7 @@ import android.view.ViewGroup;
 
 import com.lf.flickrexample.R;
 import com.lf.flickrexample.SingletonRetrofit;
-import com.lf.flickrexample.adapter.GridAdapter;
+import com.lf.flickrexample.adapter.CustomAdapter;
 import com.lf.flickrexample.interfaces.IApiFlickrInterfaceService;
 import com.lf.flickrexample.model.recentPhotos.Photo;
 import com.lf.flickrexample.model.recentPhotos.RecentPublicPhotos;
@@ -40,11 +39,12 @@ import retrofit2.Response;
 public class ListPhotosFragment extends Fragment {
 
     private IApiFlickrInterfaceService mApiService;
-    private GridAdapter mGridAdapter;
+    private CustomAdapter mAdapter;
     private SearchView mSearchView;
 
     private Menu mMenu;
     private boolean mIsGridVisible;
+    private List<Photo> mListPhotos;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;
@@ -64,15 +64,14 @@ public class ListPhotosFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         //TODO: Agregar placeholder si no hay imagenes
-        mGridAdapter = new GridAdapter(getActivity(), null);
-        mRecyclerview.setAdapter(mGridAdapter);
+        mAdapter = new CustomAdapter(getActivity(), null);
+        mRecyclerview.setAdapter(mAdapter);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), Constants.GRID_COLUMNS));
         mIsGridVisible = true;
 
         mApiService = SingletonRetrofit.getInstance()
                 .getRetrofit()
                 .create(IApiFlickrInterfaceService.class);
-
         getRecentPhotos();
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -94,11 +93,16 @@ public class ListPhotosFragment extends Fragment {
                     //List
                     mIsGridVisible = false;
                     item.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_grid));
+                    mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                 }else{
                     //Grid
                     mIsGridVisible = true;
                     item.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_format));
+                    mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), Constants.GRID_COLUMNS));
                 }
+                mAdapter = new CustomAdapter(getActivity(), null);
+                mRecyclerview.setAdapter(mAdapter);
+                updatePhotos();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -146,7 +150,7 @@ public class ListPhotosFragment extends Fragment {
     }
 
     private void queryTextChanged(String searchText) {
-        mGridAdapter.getFilter().filter(searchText);
+        mAdapter.getFilter().filter(searchText);
     }
 
     private void getRecentPhotos() {
@@ -156,7 +160,8 @@ public class ListPhotosFragment extends Fragment {
             public void onResponse(Call<RecentPublicPhotos> call, Response<RecentPublicPhotos> response) {
                 if(response.code() == Constants.CODE_RESULT_OK){
                     RecentPublicPhotos photos = response.body();
-                    updatePhotos(photos.getPhotos().getListPhotos());
+                    mListPhotos = photos.getPhotos().getListPhotos();
+                    updatePhotos();
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -169,9 +174,9 @@ public class ListPhotosFragment extends Fragment {
         });
     }
 
-    private void updatePhotos(List<Photo> listPhotos) {
-        mGridAdapter.setListPhotos(listPhotos);
-        mGridAdapter.notifyDataSetChanged();
+    private void updatePhotos() {
+        mAdapter.setListPhotos(mListPhotos);
+        mAdapter.notifyDataSetChanged();
     }
 
 }

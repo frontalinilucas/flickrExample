@@ -14,8 +14,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lf.flickrexample.R;
 import com.lf.flickrexample.SingletonRetrofit;
 import com.lf.flickrexample.interfaces.IApiFlickrInterfaceService;
-import com.lf.flickrexample.model.PhotoInfo.Photo;
+import com.lf.flickrexample.model.PhotoInfo.PhotoDetails;
 import com.lf.flickrexample.model.PhotoInfo.PhotoInfo;
+import com.lf.flickrexample.model.recentPhotos.Photo;
 import com.lf.flickrexample.ui.activity.PhotoActivity;
 import com.lf.flickrexample.ui.activity.PhotoDetailsActivity;
 import com.lf.flickrexample.utils.CircleTransform;
@@ -35,7 +36,8 @@ import retrofit2.Response;
 public class PhotoDetailsFragment extends Fragment {
 
     private IApiFlickrInterfaceService mApiService;
-    private com.lf.flickrexample.model.recentPhotos.Photo mPhoto;
+    private Photo mPhoto;
+    private Call<PhotoInfo> mPhotoInfo;
 
     @BindView(R.id.imgDetail)
     AppCompatImageView mImgDetail;
@@ -70,6 +72,9 @@ public class PhotoDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_photodetails, container, false);
         ButterKnife.bind(this, view);
 
+        mApiService = SingletonRetrofit.getInstance()
+                .getRetrofit()
+                .create(IApiFlickrInterfaceService.class);
         getInfoExtra();
         updateImage();
 
@@ -85,13 +90,15 @@ public class PhotoDetailsFragment extends Fragment {
         return view;
     }
 
-    private void getInfoExtra() {
-        mApiService = SingletonRetrofit.getInstance()
-                .getRetrofit()
-                .create(IApiFlickrInterfaceService.class);
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        mPhotoInfo.cancel();
+    }
 
-        Call<PhotoInfo> photoInfo = mApiService.getInfoExtra(getString(R.string.flickrApiKey), mPhoto.getId());
-        photoInfo.enqueue(new Callback<PhotoInfo>() {
+    private void getInfoExtra() {
+        mPhotoInfo = mApiService.getInfoExtra(getString(R.string.flickrApiKey), mPhoto.getId());
+        mPhotoInfo.enqueue(new Callback<PhotoInfo>() {
             @Override
             public void onResponse(Call<PhotoInfo> call, Response<PhotoInfo> response) {
                 if(response.code() == Constants.CODE_RESULT_OK){
@@ -107,24 +114,26 @@ public class PhotoDetailsFragment extends Fragment {
         });
     }
 
-    private void updateInfoProfile(Photo photo) {
-        Glide.with(mImgIconProfile.getContext())
-                .load(photo.getOwner().getUrlImage())
-                .centerCrop()
-                .thumbnail(Constants.THUMBNAIL_ICON)
-                .crossFade(Constants.CROSSFADE_TIME)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .transform(new CircleTransform(mImgIconProfile.getContext()))
-                .into(mImgIconProfile);
+    private void updateInfoProfile(PhotoDetails photoDetails) {
+        if(mPhotoInfo != null && !mPhotoInfo.isCanceled()){
+            Glide.with(mImgIconProfile.getContext())
+                    .load(photoDetails.getOwner().getUrlImage())
+                    .centerCrop()
+                    .thumbnail(Constants.THUMBNAIL_ICON)
+                    .crossFade(Constants.CROSSFADE_TIME)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .transform(new CircleTransform(mImgIconProfile.getContext()))
+                    .into(mImgIconProfile);
 
-        mTextUsernameProfile.setText(photo.getOwner().getUsername());
-        mTextLocationProfile.setText(photo.getOwner().getLocation());
-        mTextDateProfile.setText(photo.getDates().getDate());
-        if(!photo.getTitle().equals(""))
-            mTextTitle.setText(photo.getTitle());
-        else
-            mTextTitle.setVisibility(View.GONE);
-        mTextDescription.setText(photo.getDescription());
+            mTextUsernameProfile.setText(photoDetails.getOwner().getUsername());
+            mTextLocationProfile.setText(photoDetails.getOwner().getLocation());
+            mTextDateProfile.setText(photoDetails.getDates().getDate());
+            if(!photoDetails.getTitle().equals(""))
+                mTextTitle.setText(photoDetails.getTitle());
+            else
+                mTextTitle.setVisibility(View.GONE);
+            mTextDescription.setText(photoDetails.getDescription());
+        }
     }
 
     private void updateImage() {

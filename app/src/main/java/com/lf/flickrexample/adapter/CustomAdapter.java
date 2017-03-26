@@ -1,7 +1,6 @@
 package com.lf.flickrexample.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lf.flickrexample.R;
 import com.lf.flickrexample.model.recentPhotos.Photo;
-import com.lf.flickrexample.ui.activity.PhotoDetailsActivity;
 import com.lf.flickrexample.utils.Constants;
 import com.lf.flickrexample.utils.Utils;
 
@@ -25,41 +23,36 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Lucas on 25/3/17.
+ * Created by Lucas on 26/3/17.
  */
 
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridHolder> implements Filterable {
+public class CustomAdapter extends RecyclerView.Adapter implements Filterable {
 
-    private Activity mActivity;
-    private List<Photo> mListPhotos;
-    private List<Photo> mListFiltered;
+    protected Activity mActivity;
+    protected List<Photo> mListPhotos;
+    protected List<Photo> mListFiltered;
 
-    public GridAdapter(Activity context, List<Photo> photos){
+    public CustomAdapter(Activity context, List<Photo> photos){
         mActivity = context;
         mListPhotos = photos;
     }
 
-    public void setListPhotos(List<Photo> photos){
-        mListPhotos = photos;
-    }
-
     @Override
-    public GridHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mActivity);
 
-        return new GridHolder(inflater, parent);
+        return new Holder(inflater, parent);
     }
 
     @Override
-    public void onBindViewHolder(final GridHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         Photo photo = mListPhotos.get(position);
-        holder.bindPhoto(photo);
-        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+        Holder customHolder = (Holder) holder;
+        customHolder.bindPhoto(photo);
+        customHolder.mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = PhotoDetailsActivity.getIntent(mActivity, mListPhotos.get(holder.getAdapterPosition()));
-                mActivity.startActivity(intent);
-                Utils.addStartTransitionAnimation(mActivity);
+                Utils.startListPhotosActivity(mActivity, holder, mListPhotos.get(holder.getAdapterPosition()));
             }
         });
     }
@@ -99,13 +92,17 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridHolder> im
         };
     }
 
-    class GridHolder extends RecyclerView.ViewHolder{
+    public void setListPhotos(List<Photo> photos){
+        mListPhotos = photos;
+    }
+
+    class Holder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.image)
         AppCompatImageView mImageView;
 
-        public GridHolder(LayoutInflater inflater, ViewGroup container) {
-            super(inflater.inflate(R.layout.list_item_image, container, false));
+        public Holder(LayoutInflater inflater, ViewGroup container) {
+            super(inflater.inflate(R.layout.item_adapter, container, false));
             ButterKnife.bind(this, itemView);
         }
 

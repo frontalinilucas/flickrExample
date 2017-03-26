@@ -30,16 +30,19 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/imgIconProfile"
                 android:layout_toEndOf="@+id/imgIconProfile"
+                android:layout_toLeftOf="@+id/textDateProfile"
+                android:layout_toStartOf="@+id/textDateProfile"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/paddingProfile">
+                android:layout_marginLeft="@dimen/paddingProfile"
+                android:id="@+id/content">
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="daphneall"
+                    tools:text="daphneal"
                     android:textColor="@android:color/black"
                     android:textStyle="bold"
                     android:textSize="@dimen/sizeUsernameProfile"
@@ -54,21 +57,18 @@
                     android:textSize="@dimen/sizeLocationProfile"
                     android:id="@+id/textLocationProfile"/>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/textUsernameProfile"
-                    android:layout_toRightOf="@+id/textUsernameProfile"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    tools:text="Sep 2"
-                    android:gravity="end"
-                    android:id="@+id/textDateProfile"
-                    android:layout_alignTop="@+id/textUsernameProfile"
-                    android:layout_alignBottom="@+id/textUsernameProfile"
-                    android:minWidth="@dimen/minWidthDateProfile"/>
-
             </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                tools:text="Sep 2"
+                android:gravity="end"
+                android:id="@+id/textDateProfile"
+                android:layout_alignTop="@+id/content"
+                android:layout_alignBottom="@+id/content"/>
 
         </RelativeLayout>
 

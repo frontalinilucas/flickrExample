@@ -3,13 +3,14 @@ package com.lf.flickrexample.model.PhotoInfo;
 import com.google.gson.annotations.SerializedName;
 import com.lf.flickrexample.utils.Constants;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Lucas on 25/3/17.
  */
 
-public class Dates {
+public class Dates implements Serializable {
 
     @SerializedName("posted")
     private long mPosted;

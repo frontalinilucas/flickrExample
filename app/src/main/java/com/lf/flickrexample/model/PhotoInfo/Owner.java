@@ -3,11 +3,13 @@ package com.lf.flickrexample.model.PhotoInfo;
 import com.google.gson.annotations.SerializedName;
 import com.lf.flickrexample.utils.Constants;
 
+import java.io.Serializable;
+
 /**
  * Created by Lucas on 25/3/17.
  */
 
-public class Owner {
+public class Owner implements Serializable {
 
     @SerializedName("nsid")
     private String mId;

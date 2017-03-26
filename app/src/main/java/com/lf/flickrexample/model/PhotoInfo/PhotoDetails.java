@@ -2,11 +2,13 @@ package com.lf.flickrexample.model.PhotoInfo;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Lucas on 25/3/17.
  */
 
-public class Photo {
+public class PhotoDetails implements Serializable {
 
     @SerializedName("id")
     private String mId;
