@@ -33,4 +33,23 @@ public class Photos {
         return mPhotos;
     }
 
+    public List<Photo> getPhotos() {
+        return mPhotos;
+    }
+
+    public int getPage() {
+        return mPage;
+    }
+
+    public int getPages() {
+        return mPages;
+    }
+
+    public int getPerPage() {
+        return mPerPage;
+    }
+
+    public int getTotal() {
+        return mTotal;
+    }
 }

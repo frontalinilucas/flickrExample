@@ -16,7 +16,8 @@ public interface IApiFlickrInterfaceService {
     @GET("/services/rest?method=flickr.photos.getRecent&format=json&nojsoncallback=1")
     Call<RecentPublicPhotos> getPublicPhotos(
             @Query("api_key") String api_key,
-            @Query("per_page") int per_page);
+            @Query("per_page") int per_page,
+            @Query("page") int page);
 
     @GET("/services/rest?method=flickr.photos.getInfo&format=json&nojsoncallback=1")
     Call<PhotoInfo> getInfoExtra(

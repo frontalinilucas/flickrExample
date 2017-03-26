@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import com.lf.flickrexample.SingletonRetrofit;
 import com.lf.flickrexample.adapter.CustomAdapter;
 import com.lf.flickrexample.interfaces.IApiFlickrInterfaceService;
 import com.lf.flickrexample.model.recentPhotos.Photo;
+import com.lf.flickrexample.model.recentPhotos.Photos;
 import com.lf.flickrexample.model.recentPhotos.RecentPublicPhotos;
 import com.lf.flickrexample.utils.Constants;
 
@@ -44,7 +47,8 @@ public class ListPhotosFragment extends Fragment {
 
     private Menu mMenu;
     private boolean mIsGridVisible;
-    private List<Photo> mListPhotos;
+    private Photos mPhotos;
+    private int mPageView;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;
@@ -52,8 +56,17 @@ public class ListPhotosFragment extends Fragment {
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    @BindView(R.id.imgPagerBack)
+    AppCompatImageView mImgPagerBack;
+
+    @BindView(R.id.textPagerTitle)
+    AppCompatTextView mTextPagerTitle;
+
+    @BindView(R.id.imgPagerProceed)
+    AppCompatImageView mImgPagerProceed;
+
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -62,6 +75,7 @@ public class ListPhotosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         View view = inflater.inflate(R.layout.fragment_listphotos, container, false);
         ButterKnife.bind(this, view);
+        setPageView(1);
 
         //TODO: Agregar placeholder si no hay imagenes
         mAdapter = new CustomAdapter(getActivity(), null);
@@ -77,7 +91,24 @@ public class ListPhotosFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                setPageView(1);
                 getRecentPhotos();
+            }
+        });
+
+        mImgPagerBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPageView(mPageView - 1);
+                clickPager();
+            }
+        });
+
+        mImgPagerProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPageView(mPageView + 1);
+                clickPager();
             }
         });
 
@@ -154,13 +185,13 @@ public class ListPhotosFragment extends Fragment {
     }
 
     private void getRecentPhotos() {
-        Call<RecentPublicPhotos> callPublicPhotos = mApiService.getPublicPhotos(getString(R.string.flickrApiKey), Constants.PHOTOS_PER_PAGE);
+        Call<RecentPublicPhotos> callPublicPhotos = mApiService.getPublicPhotos(getString(R.string.flickrApiKey), Constants.PHOTOS_PER_PAGE, mPageView);
         callPublicPhotos.enqueue(new Callback<RecentPublicPhotos>() {
             @Override
             public void onResponse(Call<RecentPublicPhotos> call, Response<RecentPublicPhotos> response) {
                 if(response.code() == Constants.CODE_RESULT_OK){
                     RecentPublicPhotos photos = response.body();
-                    mListPhotos = photos.getPhotos().getListPhotos();
+                    mPhotos = photos.getPhotos();
                     updatePhotos();
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -172,11 +203,35 @@ public class ListPhotosFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
+        updatePagerTitle();
     }
 
     private void updatePhotos() {
-        mAdapter.setListPhotos(mListPhotos);
+        mAdapter.setListPhotos(mPhotos.getListPhotos());
         mAdapter.notifyDataSetChanged();
     }
 
+    private void updatePagerTitle() {
+        mTextPagerTitle.setText(getString(R.string.numberPage, mPageView));
+    }
+
+    private void clickPager() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        getRecentPhotos();
+    }
+
+    private void setPageView(int pageView) {
+        //mImgPagerBack.setEnabled(false);
+        mImgPagerBack.setVisibility(View.VISIBLE);
+        mImgPagerProceed.setVisibility(View.VISIBLE);
+        if(pageView <= 1) {
+            mPageView = 1;
+            mImgPagerBack.setVisibility(View.INVISIBLE);
+        }else if(mPhotos != null && pageView >= mPhotos.getPages()) {
+            mPageView = mPhotos.getPages();
+            mImgPagerProceed.setVisibility(View.INVISIBLE);
+        }else {
+            mPageView = pageView;
+        }
+    }
 }

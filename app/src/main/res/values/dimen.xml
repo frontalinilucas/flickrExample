@@ -9,4 +9,7 @@
     <dimen name="sizeUsernameProfile">17sp</dimen>
     <dimen name="sizeLocationProfile">15sp</dimen>
     <dimen name="sizeImgProfile">50dp</dimen>
+
+    <dimen name="sizeTitlePage">17sp</dimen>
+    <dimen name="heightPager">40dp</dimen>
 </resources>
