@@ -3,7 +3,6 @@ package com.lf.flickrexample.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,8 @@ import com.lf.flickrexample.R;
 import com.lf.flickrexample.SingletonRetrofit;
 import com.lf.flickrexample.adapter.GridAdapter;
 import com.lf.flickrexample.interfaces.IApiFlickrInterfaceService;
-import com.lf.flickrexample.model.Photo;
-import com.lf.flickrexample.model.RecentPublicPhotos;
+import com.lf.flickrexample.model.recentPhotos.Photo;
+import com.lf.flickrexample.model.recentPhotos.RecentPublicPhotos;
 import com.lf.flickrexample.utils.Constants;
 
 import java.util.List;
@@ -48,6 +47,7 @@ public class ListPhotosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_listphotos, container, false);
         ButterKnife.bind(this, view);
 
+        //TODO: Agregar placeholder si no hay imagenes
         mGridAdapter = new GridAdapter(getActivity(), null);
         mRecyclerview.setAdapter(mGridAdapter);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), Constants.GRID_COLUMNS));

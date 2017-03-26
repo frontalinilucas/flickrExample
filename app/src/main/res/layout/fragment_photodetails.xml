@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/heightImageDetail"
+            android:layout_margin="@dimen/marginPhotoProfile"
+            android:background="@color/placeholderImage"
+            android:id="@+id/imgDetail"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/paddingProfile">
+            
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/sizeImgProfile"
+                android:layout_height="@dimen/sizeImgProfile"
+                android:id="@+id/imgIconProfile"
+                android:layout_centerVertical="true"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/imgIconProfile"
+                android:layout_toEndOf="@+id/imgIconProfile"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/paddingProfile">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="daphneall"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sizeUsernameProfile"
+                    android:id="@+id/textUsernameProfile"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textUsernameProfile"
+                    tools:text="Decorative Museum, Paris"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sizeLocationProfile"
+                    android:id="@+id/textLocationProfile"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/textUsernameProfile"
+                    android:layout_toRightOf="@+id/textUsernameProfile"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    tools:text="Sep 2"
+                    android:gravity="end"
+                    android:id="@+id/textDateProfile"
+                    android:layout_alignTop="@+id/textUsernameProfile"
+                    android:layout_alignBottom="@+id/textUsernameProfile"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textTitle"
+            android:paddingLeft="@dimen/paddingProfile"
+            android:paddingRight="@dimen/paddingProfile"
+            tools:text="Her Düğünde Damat, Her Cenazede Ölü olanlar"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textDescription"
+            android:padding="@dimen/paddingProfile"/>
+
+        <!--  <ProgressBar
+              android:id="@+id/progressBar1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true" /> -->
+        
+    </LinearLayout>
+
+</ScrollView>

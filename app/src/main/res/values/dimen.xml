@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="heightImage">120dp</dimen>
+    <dimen name="heightImageGrid">120dp</dimen>
+    <dimen name="heightImageDetail">150dp</dimen>
+
+    <dimen name="paddingProfile">16dp</dimen>
+    <dimen name="marginPhotoProfile">5dp</dimen>
+    <dimen name="sizeUsernameProfile">17sp</dimen>
+    <dimen name="sizeLocationProfile">15sp</dimen>
+    <dimen name="sizeImgProfile">50dp</dimen>
 </resources>

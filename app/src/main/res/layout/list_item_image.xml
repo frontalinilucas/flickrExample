@@ -2,7 +2,7 @@
 <android.support.v7.widget.AppCompatImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/heightImage"
+    android:layout_height="@dimen/heightImageGrid"
     android:id="@+id/image"
     android:background="@color/placeholderImage"
     android:layout_margin="1dp">

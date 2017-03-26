@@ -1,4 +1,4 @@
-package com.lf.flickrexample.model;
+package com.lf.flickrexample.model.recentPhotos;
 
 import com.google.gson.annotations.SerializedName;
 

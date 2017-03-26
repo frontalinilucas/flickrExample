@@ -1,14 +1,15 @@
-package com.lf.flickrexample.model;
+package com.lf.flickrexample.model.recentPhotos;
 
 import com.google.gson.annotations.SerializedName;
+import com.lf.flickrexample.utils.Constants;
+
+import java.io.Serializable;
 
 /**
  * Created by Lucas on 24/3/17.
  */
 
-public class Photo {
-
-    private static final String BASE_URL_IMAGE = "https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_n.jpg";
+public class Photo implements Serializable {
 
     @SerializedName("id")
     private String mId;
@@ -41,8 +42,44 @@ public class Photo {
 
     }
 
+    public String getId() {
+        return mId;
+    }
+
+    public String getOwner() {
+        return mOwner;
+    }
+
+    public String getSecret() {
+        return mSecret;
+    }
+
+    public int getServer() {
+        return mServer;
+    }
+
+    public int getFarm() {
+        return mFarm;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public int getIsPublic() {
+        return mIsPublic;
+    }
+
+    public int getIsFriend() {
+        return mIsFriend;
+    }
+
+    public int getIsFamily() {
+        return mIsFamily;
+    }
+
     public String getUrlImage(){
-        return BASE_URL_IMAGE
+        return Constants.BASE_URL_IMAGE
                 .replace("{farm-id}", String.valueOf(mFarm))
                 .replace("{server-id}", String.valueOf(mServer))
                 .replace("{id}", mId)
