@@ -86,4 +86,7 @@ public class Photo implements Serializable {
                 .replace("{secret}", mSecret);
     }
 
+    public boolean containText(String searchText) {
+        return getTitle().toLowerCase().contains(searchText);
+    }
 }

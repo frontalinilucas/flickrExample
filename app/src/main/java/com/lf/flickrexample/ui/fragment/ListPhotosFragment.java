@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -98,6 +99,7 @@ public class ListPhotosFragment extends Fragment {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    queryTextChanged(newText);
                     return false;
                 }
             });
@@ -105,6 +107,7 @@ public class ListPhotosFragment extends Fragment {
             mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
                 @Override
                 public boolean onClose() {
+                    queryTextChanged("");
                     return false;
                 }
             });
@@ -113,6 +116,10 @@ public class ListPhotosFragment extends Fragment {
         }
         mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         mSearchView.clearFocus();
+    }
+
+    private void queryTextChanged(String searchText) {
+        mGridAdapter.getFilter().filter(searchText);
     }
 
     private void getRecentPhotos() {

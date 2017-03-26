@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -16,6 +18,7 @@ import com.lf.flickrexample.ui.activity.PhotoDetailsActivity;
 import com.lf.flickrexample.utils.Constants;
 import com.lf.flickrexample.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,10 +28,11 @@ import butterknife.ButterKnife;
  * Created by Lucas on 25/3/17.
  */
 
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridHolder> {
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridHolder> implements Filterable {
 
     private Activity mActivity;
     private List<Photo> mListPhotos;
+    private List<Photo> mListFiltered;
 
     public GridAdapter(Activity context, List<Photo> photos){
         mActivity = context;
@@ -63,6 +67,36 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridHolder> {
     @Override
     public int getItemCount() {
         return (mListPhotos != null ? mListPhotos.size() : 0);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final List<Photo> results = new ArrayList<>();
+                if (mListFiltered == null)
+                    mListFiltered = mListPhotos;
+                if (constraint != null) {
+                    if (mListFiltered != null && mListFiltered.size() > 0) {
+                        for (Photo photo : mListFiltered) {
+                            if(photo.containText(constraint.toString()))
+                                results.add(photo);
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mListPhotos = (ArrayList<Photo>) results.values;
+                notifyDataSetChanged();
+
+            }
+        };
     }
 
     class GridHolder extends RecyclerView.ViewHolder{
