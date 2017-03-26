@@ -5,7 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -33,6 +38,7 @@ public class ListPhotosFragment extends Fragment {
 
     private IApiFlickrInterfaceService mApiService;
     private GridAdapter mGridAdapter;
+    private SearchView mSearchView;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;
@@ -70,6 +76,43 @@ public class ListPhotosFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if(menu.findItem(R.id.action_search) == null){
+            getActivity().getMenuInflater().inflate(R.menu.menu_listphotos, menu);
+            mSearchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+            setupSearchView();
+        }
+    }
+
+    private void setupSearchView() {
+        mSearchView.setIconified(false);
+        try{
+            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+
+            mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                @Override
+                public boolean onClose() {
+                    return false;
+                }
+            });
+        }catch(Exception e){
+
+        }
+        mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        mSearchView.clearFocus();
     }
 
     private void getRecentPhotos() {
