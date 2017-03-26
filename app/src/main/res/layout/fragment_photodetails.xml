@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/paddingProfile">
-            
+
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="@dimen/sizeImgProfile"
                 android:layout_height="@dimen/sizeImgProfile"
@@ -65,7 +65,8 @@
                     android:gravity="end"
                     android:id="@+id/textDateProfile"
                     android:layout_alignTop="@+id/textUsernameProfile"
-                    android:layout_alignBottom="@+id/textUsernameProfile"/>
+                    android:layout_alignBottom="@+id/textUsernameProfile"
+                    android:minWidth="@dimen/minWidthDateProfile"/>
 
             </RelativeLayout>
 
@@ -84,12 +85,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/textDescription"
             android:padding="@dimen/paddingProfile"/>
-
-        <!--  <ProgressBar
-              android:id="@+id/progressBar1"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerInParent="true" /> -->
         
     </LinearLayout>
 

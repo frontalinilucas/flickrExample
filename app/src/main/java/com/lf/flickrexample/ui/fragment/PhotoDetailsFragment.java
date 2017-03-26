@@ -1,5 +1,6 @@
 package com.lf.flickrexample.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatImageView;
@@ -15,9 +16,11 @@ import com.lf.flickrexample.SingletonRetrofit;
 import com.lf.flickrexample.interfaces.IApiFlickrInterfaceService;
 import com.lf.flickrexample.model.PhotoInfo.Photo;
 import com.lf.flickrexample.model.PhotoInfo.PhotoInfo;
+import com.lf.flickrexample.ui.activity.PhotoActivity;
 import com.lf.flickrexample.ui.activity.PhotoDetailsActivity;
 import com.lf.flickrexample.utils.CircleTransform;
 import com.lf.flickrexample.utils.Constants;
+import com.lf.flickrexample.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,6 +72,15 @@ public class PhotoDetailsFragment extends Fragment {
 
         getInfoExtra();
         updateImage();
+
+        mImgDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = PhotoActivity.getIntent(getActivity(), mPhoto.getUrlImage());
+                startActivity(intent);
+                Utils.addStartTransitionAnimation(getActivity());
+            }
+        });
 
         return view;
     }

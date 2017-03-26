@@ -5,16 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.lf.flickrexample.model.recentPhotos.Photo;
-import com.lf.flickrexample.ui.fragment.PhotoDetailsFragment;
+import com.lf.flickrexample.ui.fragment.PhotoFragment;
 
 /**
  * Created by Lucas on 25/3/17.
  */
 
-public class PhotoDetailsActivity extends SingleFragmentActivity {
+public class PhotoActivity extends SingleFragmentActivity {
 
-    private static final String KEY_PHOTO = "KEY_PHOTO";
+    private static final String KEY_URL_PHOTO = "KEY_URL_PHOTO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -28,21 +27,21 @@ public class PhotoDetailsActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment(Intent intent) {
-        Fragment fragment = new PhotoDetailsFragment();
+        Fragment fragment = new PhotoFragment();
         fragment.setArguments(intent.getExtras());
         return fragment;
     }
 
-    public static Intent getIntent(Context context, Photo photo){
-        Intent intent = new Intent(context, PhotoDetailsActivity.class);
+    public static Intent getIntent(Context context, String urlPhoto){
+        Intent intent = new Intent(context, PhotoActivity.class);
         Bundle args = new Bundle();
-        args.putSerializable(KEY_PHOTO, photo);
+        args.putString(KEY_URL_PHOTO, urlPhoto);
         intent.putExtras(args);
         return intent;
     }
 
-    public static Photo getPhoto(Bundle bundle){
-        return (Photo)bundle.getSerializable(KEY_PHOTO);
+    public static String getUrlPhoto(Bundle bundle){
+        return bundle.getString(KEY_URL_PHOTO);
     }
 
 }

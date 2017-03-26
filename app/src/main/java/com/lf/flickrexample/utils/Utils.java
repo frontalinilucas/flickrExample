@@ -1,7 +1,6 @@
 package com.lf.flickrexample.utils;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 
 import com.lf.flickrexample.R;
 

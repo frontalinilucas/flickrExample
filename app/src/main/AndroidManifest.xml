@@ -24,6 +24,9 @@
         <activity android:name=".ui.activity.PhotoDetailsActivity">
         </activity>
 
+        <activity android:name=".ui.activity.PhotoActivity">
+        </activity>
+
     </application>
 
 </manifest>
