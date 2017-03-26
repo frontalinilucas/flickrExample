@@ -20,6 +20,9 @@ public class Constants {
     public static final int PHOTOS_PER_PAGE = 60;
 
     public static final float THUMBNAIL_IMAGE = 0.5f;
+    public static final float THUMBNAIL_ICON = 0.1f;
     public static final int CROSSFADE_TIME = 200;
+
+    public static final int CODE_RESULT_OK = 200;
 
 }

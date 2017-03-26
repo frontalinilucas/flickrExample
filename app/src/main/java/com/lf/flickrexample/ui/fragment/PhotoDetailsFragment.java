@@ -94,10 +94,10 @@ public class PhotoDetailsFragment extends Fragment {
         photoInfo.enqueue(new Callback<PhotoInfo>() {
             @Override
             public void onResponse(Call<PhotoInfo> call, Response<PhotoInfo> response) {
-                int statusCode = response.code();
-                PhotoInfo photoInfo = response.body();
-
-                updateInfoProfile(photoInfo.getPhoto());
+                if(response.code() == Constants.CODE_RESULT_OK){
+                    PhotoInfo photoInfo = response.body();
+                    updateInfoProfile(photoInfo.getPhoto());
+                }
             }
 
             @Override
@@ -111,7 +111,7 @@ public class PhotoDetailsFragment extends Fragment {
         Glide.with(mImgIconProfile.getContext())
                 .load(photo.getOwner().getUrlImage())
                 .centerCrop()
-                .thumbnail(Constants.THUMBNAIL_IMAGE)
+                .thumbnail(Constants.THUMBNAIL_ICON)
                 .crossFade(Constants.CROSSFADE_TIME)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(new CircleTransform(mImgIconProfile.getContext()))

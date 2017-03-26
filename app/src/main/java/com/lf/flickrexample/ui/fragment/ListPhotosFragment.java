@@ -2,6 +2,7 @@ package com.lf.flickrexample.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,9 @@ public class ListPhotosFragment extends Fragment {
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;
 
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -52,29 +56,38 @@ public class ListPhotosFragment extends Fragment {
         mRecyclerview.setAdapter(mGridAdapter);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), Constants.GRID_COLUMNS));
 
+        mApiService = SingletonRetrofit.getInstance()
+                .getRetrofit()
+                .create(IApiFlickrInterfaceService.class);
+
         getRecentPhotos();
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getRecentPhotos();
+            }
+        });
 
         return view;
     }
 
     private void getRecentPhotos() {
-        mApiService = SingletonRetrofit.getInstance()
-                .getRetrofit()
-                .create(IApiFlickrInterfaceService.class);
-
         Call<RecentPublicPhotos> callPublicPhotos = mApiService.getPublicPhotos(getString(R.string.flickrApiKey), Constants.PHOTOS_PER_PAGE);
         callPublicPhotos.enqueue(new Callback<RecentPublicPhotos>() {
             @Override
             public void onResponse(Call<RecentPublicPhotos> call, Response<RecentPublicPhotos> response) {
-                int statusCode = response.code();
-                RecentPublicPhotos photos = response.body();
-
-                updatePhotos(photos.getPhotos().getListPhotos());
+                if(response.code() == Constants.CODE_RESULT_OK){
+                    RecentPublicPhotos photos = response.body();
+                    updatePhotos(photos.getPhotos().getListPhotos());
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<RecentPublicPhotos> call, Throwable t) {
                 //TODO. Mostrar error
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
