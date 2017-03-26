@@ -8,6 +8,14 @@
         android:id="@+id/action_search"
         app:showAsAction="ifRoom|collapseActionView"
         android:icon="@drawable/ic_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:orderInCategory="2"/>
+
+    <item
+        android:title="@string/changeLayoutManager"
+        android:id="@+id/action_change_layoutmanager"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:icon="@drawable/ic_format"
+        android:orderInCategory="1"/>
 
 </menu>

@@ -2,6 +2,8 @@ package com.lf.flickrexample.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +43,9 @@ public class ListPhotosFragment extends Fragment {
     private GridAdapter mGridAdapter;
     private SearchView mSearchView;
 
+    private Menu mMenu;
+    private boolean mIsGridVisible;
+
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;
 
@@ -62,6 +67,7 @@ public class ListPhotosFragment extends Fragment {
         mGridAdapter = new GridAdapter(getActivity(), null);
         mRecyclerview.setAdapter(mGridAdapter);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), Constants.GRID_COLUMNS));
+        mIsGridVisible = true;
 
         mApiService = SingletonRetrofit.getInstance()
                 .getRetrofit()
@@ -80,8 +86,29 @@ public class ListPhotosFragment extends Fragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_change_layoutmanager:
+                mMenu.findItem(R.id.action_search).collapseActionView();
+                if(mIsGridVisible){
+                    //List
+                    mIsGridVisible = false;
+                    item.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_grid));
+                }else{
+                    //Grid
+                    mIsGridVisible = true;
+                    item.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_format));
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if(menu.findItem(R.id.action_search) == null){
+            mMenu = menu;
             getActivity().getMenuInflater().inflate(R.menu.menu_listphotos, menu);
             mSearchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
             setupSearchView();
