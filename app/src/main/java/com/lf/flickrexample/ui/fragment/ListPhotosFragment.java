@@ -18,6 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.lf.flickrexample.R;
 import com.lf.flickrexample.SingletonRetrofit;
@@ -68,6 +71,9 @@ public class ListPhotosFragment extends Fragment {
     @BindView(R.id.imgPagerProceed)
     AppCompatImageView mImgPagerProceed;
 
+    @BindView(R.id.contentPager)
+    LinearLayout mContentPager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +90,7 @@ public class ListPhotosFragment extends Fragment {
         else
             setPageView(saveInstanceState.getInt(KEY_PAGE_VIEW));
 
-        //TODO: Agregar placeholder si no hay imagenes
+        mSwipeRefreshLayout.setRefreshing(true);
         mAdapter = new CustomAdapter(getActivity(), null);
         mRecyclerview.setAdapter(mAdapter);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), Constants.GRID_COLUMNS));
@@ -202,6 +208,7 @@ public class ListPhotosFragment extends Fragment {
             @Override
             public void onResponse(Call<RecentPublicPhotos> call, Response<RecentPublicPhotos> response) {
                 if(response.code() == Constants.CODE_RESULT_OK){
+                    thereData();
                     RecentPublicPhotos photos = response.body();
                     mPhotos = photos.getPhotos();
                     updatePhotos();
@@ -218,9 +225,16 @@ public class ListPhotosFragment extends Fragment {
         updatePagerTitle();
     }
 
+    private void thereData() {
+        mContentPager.setVisibility(View.VISIBLE);
+        mRecyclerview.setVisibility(View.VISIBLE);
+    }
+
     private void updatePhotos() {
-        mAdapter.setListPhotos(mPhotos.getListPhotos());
-        mAdapter.notifyDataSetChanged();
+        if(mPhotos != null){
+            mAdapter.setListPhotos(mPhotos.getListPhotos());
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void updatePagerTitle() {
