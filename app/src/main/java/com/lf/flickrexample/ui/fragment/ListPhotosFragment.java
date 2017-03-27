@@ -19,19 +19,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.lf.flickrexample.R;
 import com.lf.flickrexample.SingletonRetrofit;
 import com.lf.flickrexample.adapter.CustomAdapter;
 import com.lf.flickrexample.interfaces.IApiFlickrInterfaceService;
-import com.lf.flickrexample.model.recentPhotos.Photo;
 import com.lf.flickrexample.model.recentPhotos.Photos;
 import com.lf.flickrexample.model.recentPhotos.RecentPublicPhotos;
 import com.lf.flickrexample.utils.Constants;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
