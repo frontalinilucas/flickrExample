@@ -18,6 +18,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import com.lf.flickrexample.R;
@@ -50,6 +52,7 @@ public class ListPhotosFragment extends Fragment {
     private boolean mIsGridVisible;
     private Photos mPhotos;
     private int mPageView;
+    private Animation mAnimationPagerClick;
 
     @BindView(R.id.recyclerview)
     RecyclerView mRecyclerview;
@@ -80,6 +83,7 @@ public class ListPhotosFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_listphotos, container, false);
         ButterKnife.bind(this, view);
 
+        mAnimationPagerClick = AnimationUtils.loadAnimation(getContext(), R.anim.pagerbutton_click);
         if(saveInstanceState == null)
             setPageView(1);
         else
@@ -108,7 +112,7 @@ public class ListPhotosFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setPageView(mPageView - 1);
-                clickPager();
+                clickPager(mImgPagerBack);
             }
         });
 
@@ -116,7 +120,7 @@ public class ListPhotosFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setPageView(mPageView + 1);
-                clickPager();
+                clickPager(mImgPagerProceed);
             }
         });
 
@@ -236,9 +240,10 @@ public class ListPhotosFragment extends Fragment {
         mTextPagerTitle.setText(getString(R.string.numberPage, mPageView));
     }
 
-    private void clickPager() {
+    private void clickPager(AppCompatImageView imgPagerClick) {
         mSwipeRefreshLayout.setRefreshing(true);
         getRecentPhotos();
+        imgPagerClick.startAnimation(mAnimationPagerClick);
     }
 
     private void setPageView(int pageView) {
