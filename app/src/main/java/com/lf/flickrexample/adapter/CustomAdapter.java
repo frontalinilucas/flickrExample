@@ -31,10 +31,37 @@ public class CustomAdapter extends RecyclerView.Adapter implements Filterable {
     protected Activity mActivity;
     protected List<Photo> mListPhotos;
     protected List<Photo> mListFiltered;
+    private Filter mFilter;
 
     public CustomAdapter(Activity context, List<Photo> photos){
         mActivity = context;
         mListPhotos = photos;
+        mFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                final FilterResults oReturn = new FilterResults();
+                final List<Photo> results = new ArrayList<>();
+                if (mListFiltered == null)
+                    mListFiltered = mListPhotos;
+                if (constraint != null) {
+                    if (mListFiltered != null && mListFiltered.size() > 0) {
+                        for (Photo photo : mListFiltered) {
+                            if(photo.containText(constraint.toString()))
+                                results.add(photo);
+                        }
+                    }
+                    oReturn.values = results;
+                }
+                return oReturn;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mListPhotos = (ArrayList<Photo>) results.values;
+                notifyDataSetChanged();
+
+            }
+        };
     }
 
     @Override
@@ -64,32 +91,7 @@ public class CustomAdapter extends RecyclerView.Adapter implements Filterable {
 
     @Override
     public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                final FilterResults oReturn = new FilterResults();
-                final List<Photo> results = new ArrayList<>();
-                if (mListFiltered == null)
-                    mListFiltered = mListPhotos;
-                if (constraint != null) {
-                    if (mListFiltered != null && mListFiltered.size() > 0) {
-                        for (Photo photo : mListFiltered) {
-                            if(photo.containText(constraint.toString()))
-                                results.add(photo);
-                        }
-                    }
-                    oReturn.values = results;
-                }
-                return oReturn;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mListPhotos = (ArrayList<Photo>) results.values;
-                notifyDataSetChanged();
-
-            }
-        };
+        return mFilter;
     }
 
     public void setListPhotos(List<Photo> photos){
